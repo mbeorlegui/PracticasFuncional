@@ -1,6 +1,6 @@
 # Heroes de leyenda
 
-[Aquí](https://docs.google.com/document/d/10NFdwKWxWLXr4K0_7ll9uwmIgehFgkKys9sP1m754iQ/edit) se encuentra la consigna del TP.
+[Aquí](https://docs.google.com/document/d/10NFdwKWxWLXr4K0_7ll9uwmIgehFgkKys9sP1m754iQ/edit) se encuentra la consigna del parcial.
 
 ¡Bien hecho, camaradas! ¡Otra campaña exitosa dedicada al Olimpo! Hemos de celebrar con el botín obtenido esta noche, ¡porque no sabemos si el día de mañana podremos disfrutarlo!
 
