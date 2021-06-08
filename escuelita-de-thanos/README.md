@@ -64,12 +64,13 @@ Justifique si se puede ejecutar, relacionándolo con conceptos vistos en la curs
 
 ----
 
-Se evaluan los concepctos de:
+### Se evaluan los concepctos de:
 * Composición
 * Aplicación parcial
 * Orden superior
-* Modelador de información
+* Modelado de información
 * Efecto colateral
 * Recursividad
 * Evaluación diferida
 * Sistema de tipos
+
