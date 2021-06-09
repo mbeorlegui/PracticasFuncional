@@ -121,7 +121,6 @@ puedeMatarA unaBestia unHeroe = (debilidad unaBestia) unHeroe
 heracles :: Heroe
 heracles = Heroe "Heracles" "Guardial del olimpo" 700 [pistola, relampagoDeZeus] [matarAlLeonDeNemea]
 
-
 pistola :: Artefacto
 pistola = Artefacto "Pistola" 1000
 
@@ -150,7 +149,7 @@ presumir unHeroe otroHeroe
     | otherwise           = presumir (realizarTareasDe otroHeroe unHeroe) (realizarTareasDe unHeroe otroHeroe)
 
 sumatoriaDeRarezasDeArtefactos :: Heroe -> Int
-sumatoriaDeRarezasDeArtefactos unHeroe = sum . map rareza . artefactos $ unHeroe
+sumatoriaDeRarezasDeArtefactos = sum . map rareza . artefactos
 
 realizarTareasDe :: Heroe -> Heroe -> Heroe
 realizarTareasDe unHeroe otroHeroe = foldr realizarTarea otroHeroe (tareas unHeroe)
