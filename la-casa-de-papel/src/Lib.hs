@@ -79,9 +79,9 @@ primerArmaGeneraMasMiedo unArma otroArma unRehen =
 
 hacerseElMalo :: Intimidacion
 hacerseElMalo unLadron unRehen 
-    | esBerlin  = cambiarMiedo unLadron unRehen
-    | esRio     = mapComplot (+20) unRehen
-    | otherwise = mapComplot (+10) unRehen
+    | esBerlin     = cambiarMiedo unLadron unRehen
+    | esRio        = mapComplot (+20) unRehen
+    | otherwise    = mapComplot (+10) unRehen
     where esRio    = nombreLadron unLadron == "Rio"
           esBerlin = nombreLadron unLadron == "Berlin"
 

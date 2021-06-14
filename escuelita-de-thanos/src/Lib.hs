@@ -62,7 +62,7 @@ tieneMasDeUnaHabilidad = (>1) . length . habilidades
 type Gema = Personaje -> Personaje
 
 mente :: Int -> Gema
-mente unValorDado = mapEnergia (\x -> x-unValorDado)
+mente unValorDado = mapEnergia (subtract unValorDado)
 
 alma :: String -> Gema
 alma unaHabilidad = mapHabilidades (filter (/=unaHabilidad)) . mapEnergia (\x -> x-10)
@@ -142,19 +142,20 @@ la gema del infinito que produce la pérdida más grande de energía sobre la v�
 -}
 
 gemaMasPoderosa :: Guantelete -> Personaje -> Gema
-gemaMasPoderosa unGuantelete unPersonaje = obtenerGema (gemas unGuantelete) unPersonaje
+gemaMasPoderosa unGuantelete unPersonaje = obtenerGemaMasPoderosa (gemas unGuantelete) unPersonaje
 
-obtenerGema :: [Gema] -> Personaje -> Gema
-obtenerGema [x] _ = x
-obtenerGema (x:x':xs) unPersonaje
-    | primeraGemaGeneraPerdidaMasGrande x x' unPersonaje = obtenerGema (x:xs) unPersonaje
-    | otherwise = obtenerGema (x':xs) unPersonaje 
+obtenerGemaMasPoderosa :: [Gema] -> Personaje -> Gema
+obtenerGemaMasPoderosa [x] _ = x
+obtenerGemaMasPoderosa (x:x':xs) unPersonaje
+    | primeraGemaGeneraPerdidaMasGrande x x' unPersonaje = obtenerGemaMasPoderosa (x:xs) unPersonaje
+    | otherwise = obtenerGemaMasPoderosa (x':xs) unPersonaje 
 
 primeraGemaGeneraPerdidaMasGrande :: Gema -> Gema -> Personaje -> Bool
 primeraGemaGeneraPerdidaMasGrande unaGema otraGema unPersonaje = 
-    (energia (unaGema unPersonaje) - energiaDelPersonaje) > 
-    (energia (otraGema unPersonaje) - energiaDelPersonaje)
-    where energiaDelPersonaje = energia unPersonaje
+    diferenciaDeEnergias unaGema unPersonaje > diferenciaDeEnergias otraGema unPersonaje
+
+diferenciaDeEnergias :: Gema -> Personaje -> Int
+diferenciaDeEnergias gema personaje = energia (gema personaje) - energia personaje
 
 
 -- 7) Dada la función generadora de gemas y un guantelete de locos:
