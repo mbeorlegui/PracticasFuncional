@@ -4,20 +4,22 @@ import Data.List
 -- 1) Modelar ladrones y rehenes
 
 data Ladron = Ladron{
-    nombreLadron :: String,
-    habilidades :: [String],
-    armas :: [Arma]
+    nombreLadron    :: String,
+    habilidades     :: [String],
+    armas           :: [Arma]
 } deriving (Show)
 
 data Rehen = Rehen{
-    nombreRehen :: String,
-    nivelComplot :: Int,
-    nivelMiedo :: Int,
-    suPlan :: Plan,
-    complice :: Rehen
+    nombreRehen     :: String,
+    nivelComplot    :: Int,
+    nivelMiedo      :: Int,
+    plan          :: Plan
 } deriving (Show)
 
 type Arma = Rehen -> Rehen
+
+
+-- 1)
 
 pistola :: Int -> Arma
 pistola unCalibre unRehen = mapComplot (`div` (5*unCalibre)) . mapMiedo ((*) $ largoNombrePorTres unRehen) $ unRehen 
@@ -93,22 +95,20 @@ tieneMasComplotQueMiedo :: Rehen -> Bool
 tieneMasComplotQueMiedo unRehen = 
     nivelComplot unRehen > nivelMiedo unRehen
 
-type Plan = Rehen -> Ladron -> Ladron
+type Plan = Ladron -> Ladron
 
-atacarAlLadron :: Plan
-atacarAlLadron unRehen unLadron
-    | tieneMasComplotQueMiedo unRehen = 
-        mapArmas (take (cantidadDeLetrasDeCompaniero unRehen)) unLadron
-    | otherwise = unLadron
+atacarAlLadron :: Rehen -> Plan
+atacarAlLadron rehenAliado = 
+    quitarArmas (cantidadLetrasNombre rehenAliado `div` 10)
+
+quitarArmas :: Int -> Ladron -> Ladron
+quitarArmas cantidad = mapArmas (drop cantidad)
 
 esconderse :: Plan
-esconderse unRehen unLadron
-    | tieneMasComplotQueMiedo unRehen = 
-        mapArmas (take (cantidadDeHabilidadesDividido3 unLadron)) unLadron
-    | otherwise = unLadron
+esconderse unLadron = mapArmas (take (cantidadDeHabilidadesDividido3 unLadron)) unLadron
 
-cantidadDeLetrasDeCompaniero :: Rehen -> Int
-cantidadDeLetrasDeCompaniero = length . nombreRehen . complice
+cantidadLetrasNombre :: Rehen -> Int
+cantidadLetrasNombre = length . nombreRehen 
 
 cantidadDeHabilidadesDividido3 :: Ladron -> Int
 cantidadDeHabilidadesDividido3 = div 3 . length . habilidades
@@ -122,13 +122,17 @@ profesor :: Ladron
 profesor = Ladron "Profesor" ["disfrazarse de linyera", "disfrazarse de payaso", "estar siempre un paso adelante"] []
 
 pablo :: Rehen
-pablo = Rehen "Pablo" 40 30 esconderse arturito
+pablo = Rehen "Pablo" 40 30 esconderse
 
 arturito :: Rehen
-arturito = Rehen "Arturito" 70 50 esconderseYAtacarLadron pablo
+arturito = Rehen "Arturito" 70 50 (atacarAlLadron pablo . esconderse)
 
-esconderseYAtacarLadron :: Plan
-esconderseYAtacarLadron = undefined
+ladrones :: [Ladron]
+ladrones = [tokio, profesor]
+
+rehenes :: [Rehen]
+rehenes  = [pablo, arturito]
+
 
 -- 2) 
 
@@ -174,7 +178,7 @@ empiezaConEscaparseDe = (== "disfrazarse de") . take 14
 
 laCosaPintaMal :: [Ladron] -> [Rehen] -> Bool
 laCosaPintaMal unosLadrones unosRehenes =
-    promedioDeComplot unosRehenes > (promedioDeMiedo unosRehenes) * (cantidadDeArmas unosLadrones)
+    promedioDeComplot unosRehenes > promedioDeMiedo unosRehenes * cantidadDeArmasTotales unosLadrones
 
 promedioDeComplot :: [Rehen] -> Int
 promedioDeComplot unosRehenes = (sumatoriaDeComplot unosRehenes) `div` (cantidadDeRehenes unosRehenes)
@@ -191,19 +195,59 @@ promedioDeMiedo unosRehenes = (sumatoriaDeMiedo unosRehenes) `div` (cantidadDeRe
 sumatoriaDeMiedo :: [Rehen] -> Int
 sumatoriaDeMiedo = sum . map nivelMiedo
 
-cantidadDeArmas :: [Ladron] -> Int
-cantidadDeArmas = length . map armas
+cantidadDeArmasTotales :: [Ladron] -> Int
+cantidadDeArmasTotales = length . map armas
 
 
--- 8)
+-- 8) Hacer que los rehenes se rebelen
 
--- rebelarse :: [Rehen] -> Ladron -> Ladron
--- rebelarse unosRehenes unLadron = 
---     foldl (flip ($)) (suPlan $ map reducirEn10ElComplot unosRehenes) unLadron
+rebelarseContra :: [Rehen] -> Ladron -> Ladron
+rebelarseContra unosRehenes unLadron = 
+    foldl rebelarse unLadron (reducirEn10ElComplot unosRehenes)
 
--- foldl (flip ($)) unEnemigo unasGemas 
+rebelarse :: Ladron -> Rehen -> Ladron
+rebelarse unLadron unRehen
+    | esSubversivo unRehen = (plan unRehen) unLadron
+    | otherwise          = unLadron
 
-reducirEn10ElComplot :: Rehen -> Rehen
-reducirEn10ElComplot = mapComplot (\x -> x-10)
+esSubversivo :: Rehen -> Bool
+esSubversivo unRehen = nivelComplot unRehen > nivelMiedo unRehen
 
--- type Plan = Rehen -> Ladron -> Ladron
+reducirEn10ElComplot :: [Rehen] -> [Rehen]
+reducirEn10ElComplot = map (mapComplot (subtract 10))
+
+
+-- 9) Ejecutar plan valencia
+
+planValencia :: [Rehen] -> [Ladron] -> Int
+planValencia unosRehenes = 
+    (*1000000) . cantidadDeArmasTotales . rebelarseContraLadrones unosRehenes . armarLadronesConAmetralladoras 
+
+
+armarLadronesConAmetralladoras :: [Ladron] -> [Ladron]
+armarLadronesConAmetralladoras losLadrones =
+    map (mapArmas (ametralladora 45 :)) losLadrones
+
+rebelarseContraLadrones :: [Rehen] -> [Ladron] -> [Ladron]
+rebelarseContraLadrones unosRehenes unosLadrones =
+    map (rebelarseContra unosRehenes) unosLadrones
+
+-- 10)
+{-
+¿Se puede ejecutar el plan valencia si uno de los ladrones tiene una cantidad infinita de armas? Justifique.
+
+No se puede ejecutar el Plan Valencia ya que es necesario saber la cantidad de armas que tienen los ladrones
+Como la cantidad es infinita nunca va a terminar de contar y el programa se colgaria
+
+-}
+
+-- 11)
+{-
+¿Se puede ejecutar el plan valencia si uno de los ladrones tiene una cantidad infinita de habilidades? Justifique.
+
+En caso de que el plan valencia ejecute la funcion "esconderse", esto no va a ser posible ya que 
+pasaria lo mismo que en el punto anterior, al evaluar constantemente las habilidades
+
+En caso de que el plan valencia no ejecute le funcion "esconderse", no se evaluaran las habilidades,
+entonces se podria ejecutar tranquilamente
+-}
