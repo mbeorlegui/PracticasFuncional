@@ -36,7 +36,7 @@ Obviamente, los Dioses no se quedan cruzados de brazos. Al contrario, son ellos 
 9. Hacer que un héroe **realice** una labor, obteniendo como resultado el héroe tras haber realizado todas las tareas.
 10. Si invocamos la función anterior con una labor infinita, ¿se podrá conocer el estado final del héroe? ¿Por qué?
 
-
+---
 **ACLARACIONES**:
 - Epíteto: apodo por el cual puede llamarse a alguien en lugar de su nombre y sigue identificando al sujeto
 - Heracles: tambien conocido como Hercules
