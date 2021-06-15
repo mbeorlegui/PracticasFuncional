@@ -1,7 +1,9 @@
 # Minigolfito
+<div align="center">
 
 [Aquí](https://docs.google.com/document/d/1LeWBI6pg_7uNFN_yzS2DVuVHvD0M6PTlG1yK0lCvQVE/edit#) se encuentra la consigna del parcial. 
 
+</div>
 Lisa Simpson se propuso desarrollar un programa que le permita ayudar a su hermano a vencer a su vecino Todd en un torneo de minigolf. Para hacerlo más interesante, los padres de los niños hicieron una apuesta: el padre del niño que no gane deberá cortar el césped del otro usando un vestido de su esposa.
 
 De los participantes nos interesará el nombre del jugador, el de su padre y sus habilidades (fuerza y precisión). 
