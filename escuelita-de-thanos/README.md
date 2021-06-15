@@ -64,7 +64,7 @@ Justifique si se puede ejecutar, relacionándolo con conceptos vistos en la curs
 
 ----
 
-### Se evaluan los concepctos de:
+### Se evaluan los conceptos de:
 * Composición
 * Aplicación parcial
 * Orden superior
