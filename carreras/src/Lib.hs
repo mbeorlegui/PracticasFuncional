@@ -133,8 +133,8 @@ jetPack duracion = (mapVelocidad' (`div` 2)) . (correr duracion) . (mapVelocidad
 
 -- 4) Simular carrera
 
--- simularCarrera :: Carrera -> [Carrera -> Carrera] -> [(Int, Color)]
--- simularCarrera unaCarrera unosEventos = aplicarEventosACarrera unaCarrera unosEventos
+simularCarrera :: Carrera -> [Carrera -> Carrera] -> [(Int, Color)]
+simularCarrera unaCarrera = hayarPosicionesYColor . (aplicarEventosACarrera unaCarrera)
 
 hayarPosicionesYColor :: Carrera -> [(Int, Color)]
 hayarPosicionesYColor []    = []
@@ -143,3 +143,8 @@ hayarPosicionesYColor (x:xs) = (puestoDelAuto x xs, color x) : hayarPosicionesYC
 aplicarEventosACarrera :: Carrera -> [Evento] -> Carrera
 aplicarEventosACarrera unaCarrera unosEventos =
   foldl (\carrera evento -> evento carrera) unaCarrera unosEventos
+
+correnTodos :: Int -> Evento
+correnTodos duracion autos = map (correr duracion) autos
+
+-- usaPowerUp
