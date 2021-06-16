@@ -95,7 +95,7 @@ pesado, por lo que se suma $100 más al total.
 
 carritoDeCompras :: [Comida] -> Persona -> Persona
 carritoDeCompras comidas unaPersona = 
-  (foldl (\persona unaComida -> comprar unaComida persona) (cobrarExtra 100 unaPersona) comidas)
+  foldl (\persona unaComida -> comprar unaComida persona) (cobrarExtra 100 unaPersona) comidas
 -- \persona comida1 -> comprar comida1 persona
 
 cobrarExtra :: Int -> Persona -> Persona

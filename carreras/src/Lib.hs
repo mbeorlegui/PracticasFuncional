@@ -32,6 +32,7 @@ carrera1 = [autoEj2, autoEj2]
 
 carrera2 :: Carrera
 carrera2 = [autoEj1, autoEj1]
+
 -- Mapeos
 mapColor     :: (String -> String) -> Auto -> Auto 
 mapColor unaFuncion auto = 
@@ -120,20 +121,30 @@ afectarALosQueCumplen :: (a -> Bool) -> (a -> a) -> [a] -> [a]
 afectarALosQueCumplen criterio efecto lista = 
   (map efecto . filter criterio) lista ++ filter (not.criterio) lista
 
-terremoto :: Auto -> Carrera -> Carrera
+terremoto :: PowerUp
 terremoto unAuto = 
   afectarALosQueCumplen (autosEstanCerca unAuto) (reducirVelocidadEn 50)
 
-miguelitos :: Int -> Auto -> Carrera -> Carrera
+miguelitos :: Int -> PowerUp
 miguelitos reductor unAuto = 
   afectarALosQueCumplen (autoVaAdelante unAuto) (reducirVelocidadEn reductor)
+-- flip :: Auto -> Int -> Carrera -> Carrera
+--         Int -> Auto -> Carrera -> Carrera
+jetPack :: Int -> PowerUp
+jetPack duracion unAuto carrera = (:) (efectoJetPack duracion unAuto) (excluirAutoDeCarrera unAuto carrera)
 
-jetPack :: Int -> Auto -> Auto
-jetPack duracion = (mapVelocidad' (`div` 2)) . (correr duracion) . (mapVelocidad' (*2))
+efectoJetPack :: Int -> Auto -> Auto
+efectoJetPack duracion = (mapVelocidad' (`div` 2)) . (correr duracion) . (mapVelocidad' (*2))
 
--- 4) Simular carrera
+type PowerUp = Auto -> Carrera -> Carrera
 
-simularCarrera :: Carrera -> [Carrera -> Carrera] -> [(Int, Color)]
+ejemploPowerUps :: [PowerUp]
+ejemploPowerUps = [terremoto, jetPack 10, miguelitos 10]
+
+-- 4) 
+-- a. Simular carrera
+
+simularCarrera :: Carrera -> [Evento] -> [(Int, Color)]
 simularCarrera unaCarrera = hayarPosicionesYColor . (aplicarEventosACarrera unaCarrera)
 
 hayarPosicionesYColor :: Carrera -> [(Int, Color)]
@@ -144,7 +155,41 @@ aplicarEventosACarrera :: Carrera -> [Evento] -> Carrera
 aplicarEventosACarrera unaCarrera unosEventos =
   foldl (\carrera evento -> evento carrera) unaCarrera unosEventos
 
+
+-- b. Desarrolar estas funciones para generar eventos
+
 correnTodos :: Int -> Evento
 correnTodos duracion autos = map (correr duracion) autos
 
--- usaPowerUp
+usaPowerUp :: Color -> Carrera -> PowerUp -> Carrera
+usaPowerUp unColor carrera powerUp = powerUp (hayarAutoSegunColor unColor carrera) carrera
+
+hayarAutoSegunColor :: Color -> Carrera -> Auto
+hayarAutoSegunColor unColor = head . filter ((==unColor) . color)
+
+
+{-
+  c. Mostrar un ejemplo de uso de la función simularCarrera con autos de colores rojo, blanco, azul y
+  negro que vayan inicialmente a velocidad 120 y su distancia recorrida sea 0, de modo que ocurran
+  los siguientes eventos
+-}
+
+ejemploSimularCarrera :: Carrera -> [Evento] -> [(Int, Color)]
+ejemploSimularCarrera unaCarrera unosEventos = undefined
+
+-- eventosEjemplo :: [Evento]
+-- eventosEjemplo = [
+--   map (correr 30), 
+--   afectarALosQueCumplen (color == "azul") (jetPack 3)
+-- ]
+
+carreraEjemplo :: Carrera
+carreraEjemplo = 
+  [generarAutoColor "rojo", generarAutoColor "blanco", generarAutoColor "azul", generarAutoColor "negro"]
+
+generarAutoColor :: Color -> Auto
+generarAutoColor unColor = Auto {
+  color = unColor,
+  velocidad = 120,
+  distancia = 0
+}
