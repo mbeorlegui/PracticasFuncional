@@ -8,6 +8,7 @@ En este repositorio encontraran una serie de parciales resueltos por mí del Par
 - [La casa de papel](3)
 - [Minigolfito](4)
 - [Pdeppi](5)
+- [Clases de pociones](6)
 
 ### Se evaluan los conceptos de:
 * Composición
@@ -26,3 +27,4 @@ En este repositorio encontraran una serie de parciales resueltos por mí del Par
 [3]: https://github.com/mbeorlegui/PracticasHaskell/tree/master/la-casa-de-papel
 [4]: https://github.com/mbeorlegui/PracticasHaskell/tree/master/minigolfito
 [5]: https://github.com/mbeorlegui/PracticasHaskell/tree/master/pdeppi
+[6]: https://github.com/mbeorlegui/PracticasHaskell/tree/master/clase-de-pociones
