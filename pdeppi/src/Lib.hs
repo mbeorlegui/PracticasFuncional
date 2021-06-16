@@ -138,8 +138,9 @@ sinTACCis = mapIngredientes (map (++" libre de gluten"))
 
 findeVegetariano :: Cupon
 findeVegetariano comida
-  | contieneIngrediente "carne" comida = mapCosto (`div` 3) comida
-  | otherwise            = comida
+  | esVegetariana = mapCosto ((`div` 100 ) . (*70)) comida
+  | otherwise     = comida
+  where esVegetariana = contieneIngrediente "carne" comida
 
 --
 
@@ -208,7 +209,7 @@ esVocal letra = elem letra ['a','e','i','u','u']
 -- sus ingredientes son todos los ingredientes juntos sin repetidos
 
 juntarIngredientes :: [Comida] -> [String]
-juntarIngredientes = concat . (map ingredientes)
+juntarIngredientes = concatMap ingredientes
 
 eliminarRepetidos :: [String] -> [String]
 eliminarRepetidos [] = []
